@@ -14,6 +14,7 @@ db=UsersDataBase()
 
 router = Router()
 
+#Команда старт проверяющая зарегистрирован ли пользователь и если нет то регистрирует его, а если зарегистрирован выводит список команд
 @router.message(CommandStart())
 async def cmd_start(message: Message,state: FSMContext):
   await db.create_table()
@@ -26,6 +27,7 @@ async def cmd_start(message: Message,state: FSMContext):
   else:
     await message.answer('*КОМАНДЫ-НАПОМИНАНИЕ*:\n*/reminder_add [текст]* - добавить напоминание\n*/reminder_del [номер напоминание в списке]* - удалить напоминание\n*/reminder_time [номер напоминание в списке] [час(1-12)]* - изменение время отправки\n*/reminder_list* - список напоминаний\n*КОМАНДЫ-РАСПИСАНИЕ*:\n*/schedule* - расписание\n*/schedule_quarter* - расписание на четверть\n*/schedule_calls* - расписание звонков')
 
+#Форма, сохраняющая выбранный пользователем класс
 @router.message(Form.klass)
 async def form_age(message: Message, state: FSMContext):
   if message.text.isdigit() and 5<=int(message.text)<=11:
@@ -40,6 +42,7 @@ async def form_age(message: Message, state: FSMContext):
   else:
     await message.answer('Введи число, ещё раз',reply_markup=builders.klas())
 
+#Форма, сохраняющая выбранный пользователем букву класса
 @router.message(Form.bukva)
 async def form_photo(message: Message, state: FSMContext):
   await state.update_data(bukva=message.text)
@@ -54,11 +57,13 @@ async def form_photo(message: Message, state: FSMContext):
   await db.add_user(int(message.from_user.id), message.from_user.first_name, text[0], text[1])
   await message.answer('*КОМАНДЫ-НАПОМИНАНИЕ*:\n*/reminder_add [текст]* - добавить напоминание\n*/reminder_del [номер напоминание в списке]* - удалить напоминание\n*/reminder_time [номер напоминание в списке] [час(1-12)]* - изменение время отправки\n*/reminder_list* - список напоминаний\n*КОМАНДЫ-РАСПИСАНИЕ*:\n*/schedule* - расписание\n*/schedule_quarter* - расписание на четверть\n*/schedule_calls* - расписание звонков',reply_markup=reply.rmk)
 
+#Команда создающая форму для сохранение расписание на сервер
 @router.message(Command('save'), IsAdmin(6356609598))
 async def send_ras(message: Message, state: FSMContext):
   await state.set_state(Form1.photo)
   await message.answer('скинь фото')
 
+#Форма сохраняющая расписание на сервер
 @router.message(Form1.photo, F.photo)
 async def form_photo(message: Message, state: FSMContext):
   photo_file_id = message.photo[-1].file_id
@@ -72,4 +77,5 @@ async def form_photo(message: Message, state: FSMContext):
 
 @router.message(Form1.photo, ~F.photo)
 async def incorrect_photo(message: Message, state: FSMContext):
+
   await message.answer('Отправьте фото')

@@ -1,5 +1,6 @@
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
+#Создает кнопки выбор класс
 def klas():
   items=[
     '5','6','7','8',
@@ -10,10 +11,3 @@ def klas():
   builder.adjust(4,3)
   return builder.as_markup(resize_keyboard=True)
 
-def profile(text: str | list):
-  builder = ReplyKeyboardBuilder()
-  if isinstance(text, str):
-    text=[text]
-
-  [builder.button(text=txt) for txt in text]
-  return builder.as_markup(resize_keyboard = True, one_time_keyboard = True)

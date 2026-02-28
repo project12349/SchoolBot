@@ -6,7 +6,7 @@ class UsersDataBase:
     def __init__(self):
         self.name = 'data/users.db'  # Указываем путь к базе данных.
 
-    # Метод "create_table" создает таблицу "users" и "everyday_quest" в базе данных, если она не существует.
+    # Метод "create_table" создает таблицу "users" и "napomi" в базе данных, если она не существует.
     async def create_table(self):
         async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
@@ -37,13 +37,14 @@ class UsersDataBase:
             await cursor.execute(query, (user_id,))
             return await cursor.fetchone()
 
+    #Метод получает номер класса пользователя по его ID
     async def get_users(self,user_id):
          async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
             query = 'SELECT number_class FROM users WHERE id = ?'
             await cursor.execute(query,(user_id))
             return await cursor.fetchone()
-        
+     #Метод получает ID всех пользователей   
     async def get_usersi(self):
         async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
@@ -59,7 +60,7 @@ class UsersDataBase:
                 query = 'INSERT INTO users (id, name, number_class, bukva_class, balls) VALUES (?, ?, ?, ?, ?)'
                 await cursor.execute(query, (user_id,name,number,bukva,0))
                 await db.commit()
-
+    #Метод получает номер напоминание пользователя по его ID
     async def get_napomi(self,user_id):
         async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
@@ -67,6 +68,7 @@ class UsersDataBase:
             await cursor.execute(query,(user_id,))
             return await cursor.fetchall()
 
+    #Метод получает все данные пользователя по его ID
     async def get_napomi_info(self,user_id):
         async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
@@ -74,6 +76,7 @@ class UsersDataBase:
             await cursor.execute(query,(user_id,))
             return await cursor.fetchall()
 
+    #Метод добавляет напоминание пользователя
     async def add_napomi(self,user_id,text):
         async with aiosqlite.connect(self.name) as db:
             now=datetime.now()
@@ -87,6 +90,7 @@ class UsersDataBase:
             await cursor.execute(query, (user_id,number1,text,1+now.hour,1))
             await db.commit()
 
+    #Метод обновляет время напоминание пользователя
     async def update_napomi(self,user_id,time,time_count,number):
         async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
@@ -94,6 +98,7 @@ class UsersDataBase:
             await cursor.execute(query, (time,time_count,user_id,number))
             await db.commit()
 
+    #Метод удаляет напоминание пользователя
     async def del_napomi(self,user_id,number):
         async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
@@ -101,7 +106,8 @@ class UsersDataBase:
             await cursor.execute(query, (user_id,number))
             await db.commit()
             await self.update_number(user_id)
-    
+
+    #Метод обновляет номер напоминание пользователя
     async def update_number(self,user_id):
         async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
@@ -112,6 +118,7 @@ class UsersDataBase:
                await cursor.execute(query,(number2,user_id, number[i][0]))
                await db.commit()
 
+    #Метод перебирает все данные пользователей в таблице napomi
     async def timer(self):
         async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
@@ -119,4 +126,5 @@ class UsersDataBase:
             await cursor.execute(query,())
             return await cursor.fetchall()        
             
+
 

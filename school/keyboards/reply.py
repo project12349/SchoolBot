@@ -1,5 +1,6 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton,ReplyKeyboardRemove
 
+#Создает клавиатуру выбор буквы класса для 5,8,9 класса
 bukv = ReplyKeyboardMarkup(
   keyboard=[
     [
@@ -14,6 +15,7 @@ bukv = ReplyKeyboardMarkup(
   selective=True
 )
 
+#Создает клавиатуру выбор буквы класса для 10,11 класса
 bukv3 = ReplyKeyboardMarkup(
   keyboard=[
     [
@@ -27,6 +29,7 @@ bukv3 = ReplyKeyboardMarkup(
   selective=True
 )
 
+#Создает клавиатуру для 6,7 класса
 bukv2 = ReplyKeyboardMarkup(
   keyboard=[
     [
@@ -41,5 +44,6 @@ bukv2 = ReplyKeyboardMarkup(
   input_field_placeholder='Выберите действие из меню',
   selective=True
 )
+
 
 rmk = ReplyKeyboardRemove()

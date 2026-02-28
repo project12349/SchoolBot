@@ -12,6 +12,7 @@ class AntiFloodMiddleware(BaseMiddleware):
     self.limit = TTLCache(maxsize=10_000, ttl=time_limit)
 
 
+  #Функция предовтращающая спам командами
   async def __call__(
       self,
       handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
@@ -24,3 +25,4 @@ class AntiFloodMiddleware(BaseMiddleware):
       self.limit[event.chat.id] = None
 
     return await handler(event, data)
+

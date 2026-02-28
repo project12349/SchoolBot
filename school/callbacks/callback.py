@@ -8,6 +8,7 @@ db=UsersDataBase()
 
 router = Router()
 
+#Функция ответ-инлайн кнопки изменяющая время напоминаний на выбранное пользователем
 @router.callback_query(F.data.startswith("time_"))
 async def send_random_value(callback: CallbackQuery):
     now=datetime.now()
@@ -17,3 +18,4 @@ async def send_random_value(callback: CallbackQuery):
         tim=(int(callback.data.split('time_')[1])+now.hour)-24
     await db.update_napomi(callback.from_user.id,tim,int(callback.data.split('time_')[1]),number[-1][0])
     await callback.message.edit_text(f"Отлично! Уведомление отправится {callback.data.split('time_')[1]}:00")
+

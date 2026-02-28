@@ -5,6 +5,7 @@ from aiogram.types import Message
 
 from cachetools import  TTLCache
 
+#Класс предотвращающий спам командами
 class AntiFloodMiddleware(BaseMiddleware):
 
   def __init__(self, time_limit: int=2) -> None:
@@ -21,4 +22,5 @@ class AntiFloodMiddleware(BaseMiddleware):
       return
     else:
       self.limit[event.chat.id] = None
+
     return await handler(event, data)

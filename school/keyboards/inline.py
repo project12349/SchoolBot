@@ -1,5 +1,6 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+#Создает инлайн клавиатуру
 inline=InlineKeyboardMarkup(
   inline_keyboard=[
     [
@@ -22,4 +23,5 @@ inline=InlineKeyboardMarkup(
     ]
   ]
 )
+
 

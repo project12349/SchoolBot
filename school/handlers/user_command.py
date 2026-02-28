@@ -15,6 +15,7 @@ db=UsersDataBase()
 
 router = Router()
 
+#Команда добавление напоминание
 @router.message(Command('reminder_add'))
 async def send_ras(message: Message, command: CommandObject):
   if await db.get_user(message.from_user.id) is None:
@@ -26,6 +27,7 @@ async def send_ras(message: Message, command: CommandObject):
       await db.add_napomi(message.from_user.id,command.args)
       await message.answer('Отлично, я буду напоминать вам каждый час.\n Если захотите поменять время, просто нажмите на кнопку:',reply_markup=inline.inline)
 
+#Команда удаление напоминание
 @router.message(Command('reminder_del'))
 async def send_ras(message: Message, command: CommandObject):
   if await db.get_user(message.from_user.id) is None:
@@ -37,6 +39,7 @@ async def send_ras(message: Message, command: CommandObject):
       await db.del_napomi(message.from_user.id,int(command.args))
       await message.answer('Напоминание удалено!')
 
+#Команда выводящая лист напоминаний
 @router.message(Command('reminder_list'))
 async def send_list(message: Message,command:CommandObject):
   if await db.get_user(message.from_user.id) is None:
@@ -48,6 +51,7 @@ async def send_list(message: Message,command:CommandObject):
       text.append(f'*{a[i][0]}.* {a[i][1]} - {a[i][2]}:00 ({a[i][3]} ч.)\n')
     await message.answer(''.join(text))
 
+#Команда выводящая расписание на завтра
 @router.message(Command('schedule'))
 async def send_shedule(message: Message, command: CommandObject):
   if await db.get_user(message.from_user.id) is None:
@@ -58,7 +62,8 @@ async def send_shedule(message: Message, command: CommandObject):
           image_from_pc,
           caption="*Расписание*"
       )
-    
+
+#Команда выводящая расписание звонков
 @router.message(Command('schedule_calls'))
 async def send_shedule(message: Message, command: CommandObject):
   if await db.get_user(message.from_user.id) is None:
@@ -69,7 +74,8 @@ async def send_shedule(message: Message, command: CommandObject):
           image_from_pc,
           caption="*Расписание звонков*"
       )
-    
+
+#Команда выводящая расписание на четверть
 @router.message(Command('schedule_quarter'))
 async def send_shedule(message: Message, command: CommandObject):
   if await db.get_user(message.from_user.id) is None:
@@ -85,16 +91,7 @@ async def send_shedule(message: Message, command: CommandObject):
           caption="*Расписание на четверть*"
       )
 
-@router.message(Command('sendi'), IsAdmin(6356609598))
-async def send_ras(message: Message, command: CommandObject):
-  user = await db.get_usersi()
-  for i in range(len(user)):
-    try:
-      await bot.bot1.send_message(int(user[i][0]),command.args)
-    except AiogramError as E:
-      pass
-  await message.answer('отправил')
-
+#Команда отправляющая расписание на завтра всем
 @router.message(Command("send"), IsAdmin(6356609598))
 async def send_schedule(message: Message, command: CommandObject):
   image_from_pc = FSInputFile("data/расписание.jpg")
@@ -107,6 +104,7 @@ async def send_schedule(message: Message, command: CommandObject):
       pass
   await message.answer('отправил')
 
+#Команда изменяющая время отправки напоминание
 @router.message(Command("reminder_time"))
 async def send_schedule(message: Message, command: CommandObject):
   now=datetime.now()
@@ -119,3 +117,4 @@ async def send_schedule(message: Message, command: CommandObject):
     await message.answer(f'Время изменено! Напоминание отправится в {time}:00')
   else:
     await message.answer('Введите ещё раз')
+

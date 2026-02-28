@@ -15,6 +15,7 @@ from utils.database import UsersDataBase
 db=UsersDataBase()
 bot1 = Bot(config.bot_token.get_secret_value(), default=DefaultBotProperties(parse_mode='markdown'))
 
+#функция, проверяющая время отправку напоминаний пользователей
 async def timmer():
   await db.create_table()
   while True:
@@ -29,6 +30,7 @@ async def timmer():
         await db.update_napomi(time[i][0],tim,time[i][4],time[i][1])
     await asyncio.sleep(5)
 
+#фукнция, запускающая все файлы и бота в работу
 async def main():
   await db.create_table()
   bot = Bot(config.bot_token.get_secret_value(), default=DefaultBotProperties(parse_mode='markdown'))
@@ -48,3 +50,4 @@ if __name__ == "__main__":
   loop.create_task(timmer())
   loop.run_until_complete(main())
   # asyncio.run(main())
+
